@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
+
 public class Cards {
     String suit;
     String value;
@@ -8,72 +10,46 @@ public class Cards {
     static ArrayList<Cards> hand2 = new ArrayList<Cards>();
     static ArrayList<Cards> hand3 = new ArrayList<Cards>();
     static ArrayList<Cards> hand4 = new ArrayList<Cards>();
-    //constructor and a lot of values
-    public Cards(int suit, int value){
+
+    public Cards(int suit, int value) {
         if (suit < 4) {
-            if (suit == 0) {
-                this.suit = "Hearts";
-            }
-            if (suit == 1) {
-                this.suit = "Diamonds";
-            }
-            if (suit == 2) {
-                this.suit = "Clubs";
-            }
-            if (suit == 3) {
-                this.suit = "Spades";
+            switch (suit) {
+                case 0 -> this.suit = "Hearts";
+                case 1 -> this.suit = "Diamonds";
+                case 2 -> this.suit = "Clubs";
+                case 3 -> this.suit = "Spades";
+                default -> throw new IllegalArgumentException("Unexpected value: " + suit);
             }
         } else {
             System.err.println("Out of bounds suits error");
         }
         if (value < 13) {
-            if (value == 0) {
-                this.value = "Ace";
-            }
-            if (value == 1) {
-                this.value = "2";
-            }
-            if (value == 2) {
-                this.value = "3";
-            }
-            if (value == 3) {
-                this.value = "4";
-            }
-            if (value == 4) {
-                this.value = "5";
-            }
-            if (value == 5) {
-                this.value = "6";
-            }
-            if (value == 6) {
-                this.value = "7";
-            }
-            if (value == 7) {
-                this.value = "8";
-            }
-            if (value == 8) {
-                this.value = "9";
-            }
-            if (value == 9) {
-                this.value = "10";
-            }
-            if (value == 10) {
-                this.value = "Jack";
-            }
-            if (value == 11) {
-                this.value = "Queen";
-            }
-            if (value == 12) {
-                this.value = "King";
+            switch (value) {
+                case 0 -> this.value = "Ace";
+                case 1 -> this.value = "2";
+                case 2 -> this.value = "3";
+                case 3 -> this.value = "4";
+                case 4 -> this.value = "5";
+                case 5 -> this.value = "6";
+                case 6 -> this.value = "7";
+                case 7 -> this.value = "8";
+                case 8 -> this.value = "9";
+                case 9 -> this.value = "10";
+                case 10 -> this.value = "Jack";
+                case 11 -> this.value = "Queen";
+                case 12 -> this.value = "King";
+                default -> throw new IllegalArgumentException("Unexpected value: " + value);
             }
         } else {
             System.err.println("Out of bounds value error");
         }
     }
-    public String toString(){
+
+    public String toString() {
         return value + " of " + suit;
     }
-    public static void createDeck(int tempSuit, int tempValue){
+
+    public static void createDeck(int tempSuit, int tempValue) {
         tempSuit = 0;
         tempValue = 0;
         while (tempSuit < 4) {
@@ -86,38 +62,55 @@ public class Cards {
             }
         }
     }
-    public static void shuffleDeck(){
+
+    public static void shuffleDeck() {
         Collections.shuffle(Deck);
     }
-    public static void dealHands(){
+
+    public static void dealHands() {
         int cardIndex = 0;
         int handIndex = 0;
-        while (cardIndex > 52) {
-            while (handIndex == 0) {
+        while (cardIndex < 52) {
+            while (handIndex == 0 && cardIndex < 13) {
                 hand1.add(Deck.get(cardIndex));
                 cardIndex++;
-                if (cardIndex == 12) {
+                if (cardIndex == 13) {
                     handIndex++;
                 }
             }
-            while (handIndex == 1) {
+            while (handIndex == 1 && cardIndex < 26) {
                 hand2.add(Deck.get(cardIndex));
                 cardIndex++;
-                if (cardIndex == 25) {
+                if (cardIndex == 26) {
                     handIndex++;
                 }
             }
-            while (handIndex == 2) {
+            while (handIndex == 2 && cardIndex < 39) {
                 hand3.add(Deck.get(cardIndex));
                 cardIndex++;
-                if (cardIndex == 38) {
+                if (cardIndex == 39) {
                     handIndex++;
                 }
             }
-            while (handIndex == 3) {
+            while (handIndex == 3 && cardIndex < 52) {
                 hand4.add(Deck.get(cardIndex));
                 cardIndex++;
             }
         }
+    }
+
+    public static Cards getRandomCard(ArrayList<Cards> hand) {
+        Random rand = new Random();
+        return hand.get(rand.nextInt(hand.size()));
+    }
+
+    public static int compareCards(Cards card1, Cards card2) {
+        String[] values = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
+        int card1Value = 0, card2Value = 0;
+        for (int i = 0; i < values.length; i++) {
+            if (card1.value.equals(values[i])) card1Value = i;
+            if (card2.value.equals(values[i])) card2Value = i;
+        }
+        return Integer.compare(card1Value, card2Value);
     }
 }
